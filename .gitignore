@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# VSCode
+pip install Django==2.2.19
+
 # C extensions
 *.so
 
