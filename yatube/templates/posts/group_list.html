@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    {% block title%}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="img/fav/fav.ico" type="image">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/fav/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/fav/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/fav/favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#000">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <title>{{ group_list_title }}</title>
+  </head>
+  {% endblock %}
+  <body>
+    <header>  
+      <nav class="navbar navbar-light" style="background-color: lightskyblue">
+        <div class="container">
+          <a class="navbar-brand" href="{% url 'posts:index' %}">
+            <img src="img/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            <span style="color:red">Ya</span>tube</a>
+          </a>
+        </div>
+      </nav>      
+    </header>
+    <main>
+      {% block content %}
+      <div class="container py-5">
+        <h1>Записи сообщества {{ post.text }}</h1>
+        <p>
+          Группа тайных поклонников графа.
+        </p>
+        <article>
+          {% for post in posts %}
+          <ul>
+            <li>
+              Автор: {{ post.author.get_full_name }}
+            </li>
+            <li>
+              Дата публикации: {{ post.post_date|date:"d E Y" }}
+            </li>
+          </ul>      
+          <p>
+            {{ post.text }}
+          </p>
+        </p>
+        {% if post.group %}   
+        <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы </a>
+        {% endif %}
+        {% if not forloop.last %}<hr>{% endif %}
+        {% endfor %}
+        </article>
+      </div>
+      {% endblock %}   
+    </main>
+    <footer class="page-footer font-small blue border-top">
+      <div class="footer-copyright text-center py-3">© 2020 Copyright 
+        <p><span style="color:red">Ya</span>tube</p> 
+      </div>    
+    </footer>
+  </body>
+</html>
