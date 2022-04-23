@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+POSTS_COUNT = 10
 # Application definition
 
 INSTALLED_APPS = [
