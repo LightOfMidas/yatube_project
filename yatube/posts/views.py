@@ -18,7 +18,7 @@ def index(request):
 def group_posts(request, slug):
     group_list_title = 'Здесь будет информация о группах проекта Yatube'
     group = get_object_or_404(Group, slug=slug)
-    posts = group.elposto.all()[:POSTS_COUNT]
+    posts = group.posts.all()[:POSTS_COUNT]
     context = {
         'group_list_title': group_list_title,
         'group': group,

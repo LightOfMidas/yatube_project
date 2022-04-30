@@ -19,7 +19,7 @@ admin.site.register(Group, GroupAdmin)
 
 class PostAdmin(admin.ModelAdmin):
     list_display = (
-c        'pk',
+        'pk',
         'text',
         'pub_date',
         'author',
