@@ -1,6 +1,7 @@
-from .models import Post, User
 from django import forms
 from django.forms import ModelForm
+
+from .models import Post, User
 
 
 class PostForm(ModelForm):
@@ -10,3 +11,8 @@ class PostForm(ModelForm):
     class Meta:
         model = Post
         fields = ('text', 'group', 'author')
+        labels = {
+            'group': ('Группа'),
+            'text': ('Текст'),
+            'author': ('Автор'),
+        }
