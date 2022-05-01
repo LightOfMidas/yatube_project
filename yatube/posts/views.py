@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from yatube.settings import POSTS_COUNT
 
 from .models import Group, Post
+from .forms import PostForm
 
 
 def index(request):
@@ -25,3 +26,17 @@ def group_posts(request, slug):
         'posts': posts,
     }
     return render(request, 'posts/group_list.html', context)
+
+
+def post_create(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data['author'].username
+            return redirect(reverse_lazy('posts:profile',
+                                         kwargs={'username': username}))
+        else:
+            return render(request, 'posts/create_post.html', {'form': form})
+    form = PostForm(initial={'author': request.user})
+    return render(request, 'posts/create_post.html', {'form': form})
