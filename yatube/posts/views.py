@@ -12,12 +12,12 @@ def index(request):
     posts = Post.objects.all()[:POSTS_COUNT]
     paginator = Paginator(posts, 10)
     page_number = request.GET.get("page")
-    page = paginator.get_page(page_number)
+    page_obj = paginator.get_page(page_number)
     title = 'Это главная страница проекта Yatube'
     context = {
         'title': title,
         'posts': posts,
-        'page': page,
+        'page_obj': page_obj,
         'paginator': paginator,
     }
     return render(request, 'posts/index.html', context)
@@ -29,12 +29,12 @@ def group_posts(request, slug):
     posts = group.posts.all()[:POSTS_COUNT]
     paginator = Paginator(posts, 10)
     page_number = request.GET.get("page")
-    page = paginator.get_page(page_number)
+    page_obj = paginator.get_page(page_number)
     context = {
         'group_list_title': group_list_title,
         'group': group,
         'posts': posts,
-        'page': page,
+        'page_obj': page_obj,
         'paginator': paginator,
     }
     return render(request, 'posts/group_list.html', context)
@@ -46,12 +46,12 @@ def profile(request, username):
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get("page")
     posts_count = post_list.count()
-    page = paginator.get_page(page_number)
+    page_obj = paginator.get_page(page_number)
     context = {
         "profile": profile,
         "paginator": paginator,
         "posts_count": posts_count,
-        "page": page,
+        "page_obj": page_obj,
     }
     return render(request, 'posts/profile.html', context)
 
