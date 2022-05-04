@@ -1,26 +1,22 @@
-{% block title%} Профиль пользователя {{ user.username }} {% endblock %}
-{% block content %}
-<div class="container py-5">
-  <h1>Все посты пользователя {{ user.username }}</h1>
-  <h3>Всего постов: {{ posts.count }}</h3>
+{% extends 'base.html' %} {% block title%} Профиль пользователя {{
+profile.username }} {% endblock %} {% block content %}
+<div class="container">
+  <h1>Все посты пользователя {{ profile.get_full_name }}</h1>
+  <h3>Всего постов: {{ posts_count }}</h3>
   <article>
-    {% for post in posts %}
+    {% for post in page_obj %}
     <ul>
       <li>
-        Автор: {{ user.username.get_full_name }}
-        <a href="<!-- -->">все посты пользователя</a>
+        Автор: {{ profile.get_full_name }}
+        <a href="{% url 'posts:profile' post.author.username %}">все посты пользователя</a>
       </li>
       <li>Дата публикации: {{ post.pub_date|date:"d E Y" }}</li>
     </ul>
     <p>{{ post.text }}</p>
-    <a href="<!-- -->">подробная информация </a>
   </article>
-  {% if post.group %}
-  <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы </a>
-  {% endif %} {% if not forloop.last %}
+  {% if post.group %} {% endif %} {% if not forloop.last %}
   <hr />
   {% endif %} {% endfor %}
-  <!-- Остальные посты. после последнего нет черты -->
-  <!-- Здесь подключён паджинатор -->
 </div>
-{% endblock %}
+{% if page.has_other_pages %} {% include "paginator.html" with items=page
+paginator=paginator%} {% endif %} {% endblock %}

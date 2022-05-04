@@ -1,9 +1,9 @@
 <ul class="nav nav-pills">
   <li class="nav-item">
-    <a class="nav-link" href="<!--  -->">Об авторе</a>
+    <a class="nav-link" href="{% url 'about:author' %}">Об авторе</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="<!--  -->">Технологии</a>
+    <a class="nav-link" href="{% url 'about:tech' %}">Технологии</a>
   </li>
   {% if user.is_authenticated %}
   <a
