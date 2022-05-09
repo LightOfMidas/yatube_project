@@ -4,7 +4,7 @@
   {% endblock %}
   {% block content %}
       <div class="container">
-        <h1>Записи сообщества {{ group.title }}</h1>
+        <h1>{{ group.title }}</h1>
         <p>
           {{ group.description }}
         </p>
@@ -24,7 +24,7 @@
         </p>
         {% if not forloop.last %}<hr>{% endif %}
         {% endfor %}
-        </article>
       </div>
+        </article>
       {% include 'includes/paginator.html' %}
       {% endblock %}

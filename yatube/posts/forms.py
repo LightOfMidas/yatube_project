@@ -1,18 +1,13 @@
-from django import forms
 from django.forms import ModelForm
 
-from .models import Post, User
+from .models import Post
 
 
 class PostForm(ModelForm):
-    author = forms.ModelChoiceField(queryset=User.objects.all(),
-                                    widget=forms.widgets.HiddenInput)
-
     class Meta:
         model = Post
-        fields = ('text', 'group', 'author')
+        fields = ('text', 'group')
         labels = {
             'group': ('Группа'),
             'text': ('Текст'),
-            'author': ('Автор'),
         }
