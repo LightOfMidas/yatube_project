@@ -1,12 +1,9 @@
-from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import PostForm
 from .models import Group, Post, User
-
-User = get_user_model()
 
 
 def index(request):
@@ -57,10 +54,9 @@ def profile(request, username):
     return render(request, 'posts/profile.html', context)
 
 
-def post_detail(request, username, post_id):
-    profile = get_object_or_404(User, username=username)
+def post_detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    posts = Post.objects.filter(author=profile).all()
+    posts = Post.objects.filter(author=post.author).all()
     posts_count = posts.count()
     context = {
         'profile': profile,
@@ -91,8 +87,8 @@ def post_create(request):
 @login_required
 def post_edit(request, username, post_id):
     if request.user.username != username:
-        return redirect(f'/{username}/{post_id}/')
-    title = "Редактировать запись"
+        return redirect(f'profile/{username}/{post_id}/')
+    title = "Редактировать запись"g
     btn_caption = "Сохранить"
     post = get_object_or_404(Post, pk=post_id)
     form = PostForm(request.POST, instance=post)
@@ -100,7 +96,7 @@ def post_edit(request, username, post_id):
         post = form.save(commit=False)
         post.author = request.user
         post.save()
-        return redirect(f'/{username}/{post_id}')
+        return redirect(f'profile/{username}/{post_id}')
     context = {
         'form': form,
         'title': title,

@@ -1,6 +1,5 @@
 {% extends 'base.html' %} {% block title%} Пост {{ post.text|truncatewords:30 }}
-{% endblock %} {% block content %}
-{% load user_filters %}
+{% endblock %} {% block content %} {% load user_filters %}
 <div class="row">
   <aside class="col-12 col-md-3">
     <ul class="list-group list-group-flush">
@@ -13,7 +12,7 @@
         <a href="{% url 'posts:group_list' post.group.slug %}">
           все записи группы
         </a>
-      {% endif %}
+        {% endif %}
       </li>
       <li class="list-group-item">Автор: {{ post.author.get_full_name }}</li>
       <li
@@ -30,10 +29,11 @@
   </aside>
   <article class="col-12 col-md-9">
     <p>{{ post.text }}</p>
-    {% if profile.username == user.username %}
-    <a class="btn btn-sm btn-primary" href="{% url 'posts:post_edit' post.author.username post.id %}" role="button">Редактировать</a>
+    {% if post.author.username == user.username %}
+    <a class="btn btn-sm btn-primary"
+      href="{% url 'posts:post_edit' post.author.username post.id %}"
+      role="button">Редактировать</a>
     {% endif %}
   </article>
-  {% endif %}
 </div>
 {% endblock %}
