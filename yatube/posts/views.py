@@ -88,7 +88,7 @@ def post_create(request):
 def post_edit(request, username, post_id):
     if request.user.username != username:
         return redirect(f'profile/{username}/{post_id}/')
-    title = "Редактировать запись"g
+    title = "Редактировать запись"
     btn_caption = "Сохранить"
     post = get_object_or_404(Post, pk=post_id)
     form = PostForm(request.POST, instance=post)
