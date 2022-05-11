@@ -3,8 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
-from yatube.settings import POSTS_COUNT
-
 from .forms import PostForm
 from .models import Group, Post, User
 
@@ -12,7 +10,7 @@ User = get_user_model()
 
 
 def index(request):
-    posts = Post.objects.all()[:POSTS_COUNT]
+    posts = Post.objects.all()
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -29,7 +27,7 @@ def index(request):
 def group_posts(request, slug):
     group_list_title = 'Здесь будет информация о группах проекта Yatube'
     group = get_object_or_404(Group, slug=slug)
-    posts = group.posts.all()[:POSTS_COUNT]
+    posts = group.posts.all()
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -45,7 +43,7 @@ def group_posts(request, slug):
 
 def profile(request, username):
     profile = get_object_or_404(User, username=username)
-    posts = Post.objects.filter(author=profile).all()[:POSTS_COUNT]
+    posts = Post.objects.filter(author=profile).all()
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     posts_count = posts.count()
@@ -62,7 +60,7 @@ def profile(request, username):
 def post_detail(request, username, post_id):
     profile = get_object_or_404(User, username=username)
     post = get_object_or_404(Post, pk=post_id)
-    posts = Post.objects.filter(author=profile).all()[:POSTS_COUNT]
+    posts = Post.objects.filter(author=profile).all()
     posts_count = posts.count()
     context = {
         'profile': profile,
@@ -81,7 +79,7 @@ def post_create(request):
         post = form.save(commit=False)
         post.author = request.user
         post.save()
-        return redirect('posts:profile')
+        return redirect('posts:profile', request.user)
     context = {
         'form': form,
         'title': title,
@@ -91,19 +89,18 @@ def post_create(request):
 
 
 @login_required
-def post_edit(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    user = request.user
-    if post.author != user:
-        return redirect('posts:post_detail',
-                        username=user.username, post_id=post_id)
-    title = 'Редактировать запись'
-    btn_caption = 'Сохранить'
-    form = PostForm(request.POST or None, instance=post)
+def post_edit(request, username, post_id):
+    if request.user.username != username:
+        return redirect(f'/{username}/{post_id}/')
+    title = "Редактировать запись"
+    btn_caption = "Сохранить"
+    post = get_object_or_404(Post, pk=post_id)
+    form = PostForm(request.POST, instance=post)
     if request.method == 'POST' and form.is_valid():
-        form.save()
-        return redirect('posts:post_detail', username=request.user.username,
-                        post_id=post_id)
+        post = form.save(commit=False)
+        post.author = request.user
+        post.save()
+        return redirect(f'/{username}/{post_id}')
     context = {
         'form': form,
         'title': title,
