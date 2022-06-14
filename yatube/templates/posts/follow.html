@@ -5,11 +5,9 @@
     {% endblock %}
       {% block content %}
       <div class="container">     
-        <h1>Последние обновления на сайте </h1>
+        <h1>Отслеживаемые пользователи</h1>
         {% include 'includes/switcher.html' %}
         <article>
-          {% load cache %}
-          {% cache 20 index_page page_obj %}
           {% for post in page_obj %}
           <ul>
             <li>
@@ -33,7 +31,6 @@
         {% endif %}
         {% if not forloop.last %}<hr>{% endif %}
         {% endfor %}
-        {% endcache %}
         {% include 'includes/paginator.html' with items=page paginator=paginator%}
       </div>
         </article>
